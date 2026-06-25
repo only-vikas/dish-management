@@ -7,14 +7,20 @@ interface DishCardProps {
   onToggle: (dish: Dish) => void;
   isExternallyUpdated: boolean;
   viewMode?: 'grid' | 'list';
+  onDelete?: (dishId: string) => void;
 }
 
-export const DishCard: React.FC<DishCardProps> = ({ dish, onToggle, isExternallyUpdated, viewMode = 'grid' }) => {
+export const DishCard: React.FC<DishCardProps> = ({ dish, onToggle, isExternallyUpdated, viewMode = 'grid', onDelete }) => {
   const { dishName, description, price, imageUrl, isPublished, dishId } = dish;
 
   const handleToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     onToggle(dish);
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onDelete) onDelete(dishId);
   };
 
   const externalPulseClass = isExternallyUpdated ? 'pulse-external-change' : '';
@@ -33,6 +39,9 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onToggle, isExternally
   };
   
   const finalImageUrl = localImageMap[dishName] || imageUrl || fallbackImage;
+
+  // New dishes have IDs starting with 'dish-'. Default dishes are 'dish1', 'dish2', etc.
+  const isNewDish = dishId.startsWith('dish-');
 
   // Format price if available, else standard format
   const formattedPrice = price ? `$${price.toFixed(2)}` : '$0.00';
@@ -69,7 +78,18 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onToggle, isExternally
           </p>
           <div className="flex justify-between items-center mt-1">
             <span className="font-metadata text-metadata text-on-surface-variant">ID: {dishId}</span>
-            <span className="font-dish-name text-dish-name text-primary">{formattedPrice}</span>
+            <div className="flex items-center gap-3">
+              {isNewDish && (
+                <button 
+                  onClick={handleDelete}
+                  className="text-error hover:bg-error/10 p-1 rounded transition-colors"
+                  title="Delete Dish"
+                >
+                  <span className="material-symbols-outlined text-[18px]">delete</span>
+                </button>
+              )}
+              <span className="font-dish-name text-dish-name text-primary">{formattedPrice}</span>
+            </div>
           </div>
         </div>
         

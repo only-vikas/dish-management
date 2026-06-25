@@ -11,7 +11,7 @@ const { Router } = require('express');
 const dishController = require('../controllers/dish.controller');
 const { validate } = require('../middlewares/validate');
 const { toggleRateLimiter } = require('../middlewares/rateLimiter');
-const { dishIdParamSchema, getDishesQuerySchema } = require('../validators/dish.validator');
+const { dishIdParamSchema, getDishesQuerySchema, createDishBodySchema } = require('../validators/dish.validator');
 
 const router = Router();
 
@@ -35,6 +35,26 @@ router.patch(
   toggleRateLimiter,
   validate('params', dishIdParamSchema),
   dishController.togglePublished
+);
+
+/**
+ * POST /api/dishes
+ * Create a new dish.
+ */
+router.post(
+  '/',
+  validate('body', createDishBodySchema),
+  dishController.createDish
+);
+
+/**
+ * DELETE /api/dishes/:dishId
+ * Delete a dish.
+ */
+router.delete(
+  '/:dishId',
+  validate('params', dishIdParamSchema),
+  dishController.deleteDish
 );
 
 module.exports = router;

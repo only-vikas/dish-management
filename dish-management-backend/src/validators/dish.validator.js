@@ -37,4 +37,11 @@ const getDishesQuerySchema = z.object({
   order: z.enum(['asc', 'desc']).optional().default('asc'),
 });
 
-module.exports = { dishIdParamSchema, getDishesQuerySchema };
+const createDishBodySchema = z.object({
+  dishName: z.string().min(1, 'Dish name is required').max(100),
+  imageUrl: z.string().url('Must be a valid URL').or(z.literal('')).optional(),
+  isPublished: z.boolean().default(false),
+  description: z.string().max(500).optional(),
+});
+
+module.exports = { dishIdParamSchema, getDishesQuerySchema, createDishBodySchema };

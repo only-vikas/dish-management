@@ -42,4 +42,31 @@ async function togglePublished(req, res, next) {
   }
 }
 
-module.exports = { getAllDishes, togglePublished };
+/**
+ * POST /api/dishes
+ * Creates a new dish.
+ */
+async function createDish(req, res, next) {
+  try {
+    const newDish = await dishService.createDish(req.body);
+    res.status(201).json(success(newDish, `Dish "${newDish.dishName}" created successfully`));
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * DELETE /api/dishes/:dishId
+ * Deletes a dish.
+ */
+async function deleteDish(req, res, next) {
+  try {
+    const { dishId } = req.params;
+    await dishService.deleteDish(dishId);
+    res.json(success({ deleted: true }, `Dish deleted successfully`));
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { getAllDishes, togglePublished, createDish, deleteDish };

@@ -4,12 +4,17 @@ import { Toaster } from 'sonner';
 import { TopActivityTicker } from '../../components/TopActivityTicker';
 import { DishGrid } from './DishGrid';
 import { AddDishModal } from './AddDishModal';
+import { SettingsModal } from '../settings/SettingsModal';
+import { SupportHealthModal } from '../support/SupportHealthModal';
 import { useDishes } from '../../hooks/useDishes';
 import { useSSE } from '../../hooks/useSSE';
 import { useDishFilter } from '../../hooks/useDishFilter';
 import type { FilterStatus } from '../../hooks/useDishFilter';
 import type { RailEvent, Dish } from '../../types/dish';
 import gsap from 'gsap';
+
+import { deleteDish } from '../../services/api';
+import { toast } from 'sonner';
 
 const MAX_RAIL_EVENTS = 20;
 
@@ -18,7 +23,10 @@ export const Dashboard: React.FC = () => {
   const headerRef = useRef<HTMLElement>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
   const [comingSoonFeature, setComingSoonFeature] = useState<string | null>(null);
+  const [dishToDelete, setDishToDelete] = useState<string | null>(null);
 
   const addRailEvent = useCallback((event: RailEvent) => {
     setRailEvents((prev) => [event, ...prev].slice(0, MAX_RAIL_EVENTS));
@@ -35,14 +43,65 @@ export const Dashboard: React.FC = () => {
 
   const { filteredDishes, filterActive, setFilterActive, searchQuery, setSearchQuery, counts } = useDishFilter(dishes);
 
+  const handleToggle = useCallback((dish: Dish) => {
+    togglePublish(dish);
+  }, [togglePublish]);
+
+  const handleDelete = useCallback((dishId: string) => {
+    setDishToDelete(dishId);
+  }, []);
+
+  const confirmDelete = useCallback(async () => {
+    if (!dishToDelete) return;
+    try {
+      await deleteDish(dishToDelete);
+      sseDelete(dishToDelete);
+      toast.success('Dish deleted successfully', {
+        style: { background: '#e6f4ea', border: '1px solid #10B981', color: '#137333' }
+      });
+    } catch (err: any) {
+      toast.error('Failed to delete dish', { description: err.message });
+    } finally {
+      setDishToDelete(null);
+    }
+  }, [dishToDelete, sseDelete]);
+
   useEffect(() => {
     if (headerRef.current) {
       gsap.fromTo(
         headerRef.current,
-        { opacity: 0, y: -12 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
+        { y: -50, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
       );
     }
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey) {
+        switch (e.key.toLowerCase()) {
+          case 'k':
+            e.preventDefault();
+            document.querySelector<HTMLInputElement>('input[placeholder="Search dishes..."]')?.focus();
+            break;
+          case 'n':
+            e.preventDefault();
+            setIsModalOpen(true);
+            break;
+          case 'v':
+            e.preventDefault();
+            setViewMode(prev => prev === 'grid' ? 'list' : 'grid');
+            break;
+          case ',':
+            e.preventDefault();
+            setIsSettingsOpen(true);
+            break;
+        }
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const handleFilterClick = (status: FilterStatus) => {
@@ -100,11 +159,11 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div className="border-t border-outline-variant pt-4 flex flex-col gap-2">
-          <button onClick={() => handleLockedFeature('Settings')} className="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90">
+          <button onClick={() => setIsSettingsOpen(true)} className="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90 hover:text-primary">
             <span className="material-symbols-outlined text-[20px]">settings</span>
             <span>Settings</span>
           </button>
-          <button onClick={() => handleLockedFeature('Support')} className="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90">
+          <button onClick={() => setIsSupportOpen(true)} className="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90 hover:text-primary">
             <span className="material-symbols-outlined text-[20px]">help</span>
             <span>Support</span>
           </button>
@@ -209,7 +268,8 @@ export const Dashboard: React.FC = () => {
               dishes={filteredDishes}
               loading={loading}
               error={error}
-              onToggle={togglePublish}
+              onToggle={handleToggle}
+              onDelete={handleDelete}
               externallyUpdatedId={externallyUpdatedId}
               viewMode={viewMode}
             />
@@ -217,7 +277,44 @@ export const Dashboard: React.FC = () => {
         </div>
       </main>
 
-      <AddDishModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <AddDishModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        onSuccess={(dish) => sseUpsert(dish)}
+      />
+      
+      <SettingsModal 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+      />
+
+      <SupportHealthModal
+        isOpen={isSupportOpen}
+        onClose={() => setIsSupportOpen(false)}
+      />
+
+      {/* Delete Confirmation Modal */}
+      {dishToDelete && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[150] flex items-center justify-center p-4" onClick={() => setDishToDelete(null)}>
+          <div className="bg-surface border border-outline-variant rounded-xl shadow-xl w-full max-w-sm overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6">
+              <h3 className="font-semibold text-lg text-on-surface mb-2">Are you sure want to delete this?</h3>
+              <p className="text-sm text-on-surface-variant">This action cannot be undone.</p>
+            </div>
+            <div className="p-4 bg-surface-container-lowest border-t border-outline-variant flex justify-end gap-3">
+              <button onClick={() => setDishToDelete(null)} className="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors text-sm font-medium">
+                Cancel
+              </button>
+              <button onClick={confirmDelete} className="px-4 py-2 rounded-lg bg-error hover:bg-error/90 text-white shadow-sm transition-colors text-sm font-medium">
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Toaster position="bottom-right" />
 
       {/* Framer Motion Coming Soon Caption */}

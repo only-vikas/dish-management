@@ -41,3 +41,34 @@ export async function toggleDish(dishId: string): Promise<Dish> {
   const body: ApiResponse<Dish> = await res.json();
   return body.data;
 }
+
+/**
+ * Create a new dish.
+ * Returns the created dish document.
+ */
+export async function createDish(payload: Partial<Dish>): Promise<Dish> {
+  const res = await fetch(`${BASE}/dishes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body?.error?.message ?? `Failed to create dish: ${res.status}`);
+  }
+  const body: ApiResponse<Dish> = await res.json();
+  return body.data;
+}
+
+/**
+ * Delete a dish.
+ */
+export async function deleteDish(dishId: string): Promise<void> {
+  const res = await fetch(`${BASE}/dishes/${dishId}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body?.error?.message ?? `Failed to delete dish: ${res.status}`);
+  }
+}

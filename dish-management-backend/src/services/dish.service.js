@@ -78,4 +78,51 @@ function cleanDish(doc) {
   return { id: _id ? _id.toString() : undefined, ...rest };
 }
 
-module.exports = { getAllDishes, togglePublished };
+/**
+ * Create a new dish.
+ *
+ * @param {object} payload
+ * @returns {Promise<Dish>}
+ */
+async function createDish(payload) {
+  const dishId = 'dish-' + Math.random().toString(36).substring(2, 9);
+  
+  const dishData = {
+    dishId,
+    dishName: payload.dishName,
+    imageUrl: payload.imageUrl || '',
+    isPublished: payload.isPublished,
+    description: payload.description || 'No description available',
+    price: payload.price || (Math.floor(Math.random() * 20) + 10) + 0.99, // default random price if not provided
+  };
+
+  const newDish = new Dish(dishData);
+  await newDish.save();
+
+  logger.info(
+    { event: 'dish:created', dishId: newDish.dishId },
+    `Dish "${newDish.dishName}" created successfully`
+  );
+
+  return cleanDish(newDish.toJSON());
+}
+
+/**
+ * Delete a dish.
+ *
+ * @param {string} dishId
+ * @returns {Promise<void>}
+ */
+async function deleteDish(dishId) {
+  const deleted = await Dish.findOneAndDelete({ dishId });
+  if (!deleted) {
+    throw new AppError(`Dish with dishId '${dishId}' not found`, 404, 'DISH_NOT_FOUND');
+  }
+
+  logger.info(
+    { event: 'dish:deleted', dishId },
+    `Dish "${deleted.dishName}" deleted successfully`
+  );
+}
+
+module.exports = { getAllDishes, togglePublished, createDish, deleteDish };

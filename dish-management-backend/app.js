@@ -23,6 +23,7 @@ const { errorHandler } = require('./src/middlewares/errorHandler');
 const dishRoutes = require('./src/routes/dish.routes');
 const streamRoutes = require('./src/routes/stream.routes');
 const healthRoutes = require('./src/routes/health.routes');
+const adminRoutes = require('./src/routes/admin.routes');
 
 const app = express();
 
@@ -58,6 +59,7 @@ app.use(requestLogger);
 app.use('/api/health', healthRoutes);
 app.use('/api/dishes', dishRoutes);
 app.use('/api/stream', streamRoutes);
+app.use('/api/admin', adminRoutes);
 
 // ── 404 for unknown routes ────────────────────────────────────────────────────
 app.use((req, res) => {
