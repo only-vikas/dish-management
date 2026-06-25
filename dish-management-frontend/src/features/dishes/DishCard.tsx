@@ -20,6 +20,20 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onToggle, isExternally
   const externalPulseClass = isExternallyUpdated ? 'pulse-external-change' : '';
   const fallbackImage = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&h=400&fit=crop';
   
+  const localImageMap: Record<string, string> = {
+    'Butter Chicken': '/butter_chicken.jpg',
+    'Caesar Salad': '/caesar_salad.jpg',
+    'Chicken Tikka Masala': '/chicken_tikka_masala.jpg',
+    'Chocolate Lava Cake': '/chocolate_lava_cake.jpg',
+    'French Onion Soup': '/french_onion_soup.jpg',
+    'Pad Thai': '/pad_thai.jpg',
+    'Sushi Platter': '/sushi_platter.jpg',
+    'Spaghetti Carbonara': '/spaghetti_carbonara.jpg',
+    'Bisi Bele Bath': '/bisi_bele_bath.jpg',
+  };
+  
+  const finalImageUrl = localImageMap[dishName] || imageUrl || fallbackImage;
+
   // Format price if available, else standard format
   const formattedPrice = price ? `$${price.toFixed(2)}` : '$0.00';
 
@@ -37,7 +51,7 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onToggle, isExternally
     >
       <motion.div layout="position" className={`relative bg-surface-variant overflow-hidden ${viewMode === 'list' ? 'w-48 h-full flex-shrink-0' : 'h-48 w-full'}`}>
         <img 
-          src={imageUrl || fallbackImage} 
+          src={finalImageUrl} 
           alt={dishName}
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           onError={(e) => {

@@ -111,6 +111,10 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 process.on('uncaughtException', (err) => {
+  if (err && err.code === 40573) {
+    logger.warn('⚠️  Change streams require a replica set. Ignored uncaught exception for SSE.');
+    return;
+  }
   logger.fatal({ event: 'process:uncaught_exception', err }, 'Uncaught exception — shutting down');
   process.exit(1);
 });

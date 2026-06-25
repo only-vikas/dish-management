@@ -1,12 +1,12 @@
 [
   { "dishId": "1", "dishName": "Margherita Pizza", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg", "isPublished": true },
   { "dishId": "2", "dishName": "Spaghetti Carbonara", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_pasta_ubt.jpeg", "isPublished": false },
-  { "dishId": "3", "dishName": "Caesar Salad", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Caesar-Salad.jpg/800px-Caesar-Salad.jpg", "isPublished": true },
-  { "dishId": "4", "dishName": "Chicken Tikka Masala", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Chicken_Tikka_Masala.jpg/800px-Chicken_Tikka_Masala.jpg", "isPublished": true },
+  { "dishId": "3", "dishName": "Caesar Salad", "imageUrl": "/caesar_salad.jpg", "isPublished": true },
+  { "dishId": "4", "dishName": "Chicken Tikka Masala", "imageUrl": "/chicken_tikka_masala.jpg", "isPublished": true },
   { "dishId": "5", "dishName": "Beef Tacos", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/001_Tacos_de_carnitas%2C_Tex-Mex%2C_2011.jpg/800px-001_Tacos_de_carnitas%2C_Tex-Mex%2C_2011.jpg", "isPublished": false },
   { "dishId": "6", "dishName": "Sushi Platter", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sushi_platter.jpg/800px-Sushi_platter.jpg", "isPublished": true },
   { "dishId": "7", "dishName": "Pad Thai", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Authentic_Thai_Pad_Thai.jpg/800px-Authentic_Thai_Pad_Thai.jpg", "isPublished": false },
-  { "dishId": "8", "dishName": "French Onion Soup", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/French_onion_soup_CU.jpg/800px-French_onion_soup_CU.jpg", "isPublished": true },
-  { "dishId": "9", "dishName": "Butter Chicken", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Chicken_Tikka_Masala.jpg/800px-Chicken_Tikka_Masala.jpg", "isPublished": true },
-  { "dishId": "10", "dishName": "Chocolate Lava Cake", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Chocolate_Molten_Lava_Cake.jpg/800px-Chocolate_Molten_Lava_Cake.jpg", "isPublished": false }
+  { "dishId": "8", "dishName": "French Onion Soup", "imageUrl": "/french_onion_soup.jpg", "isPublished": true },
+  { "dishId": "9", "dishName": "Butter Chicken", "imageUrl": "/butter_chicken.jpg", "isPublished": true },
+  { "dishId": "10", "dishName": "Chocolate Lava Cake", "imageUrl": "/chocolate_lava_cake.jpg", "isPublished": false }
 ]

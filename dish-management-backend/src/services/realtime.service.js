@@ -63,8 +63,8 @@ async function start() {
     _isRunning = true;
     logger.info({ event: 'realtime:started' }, '🟢 Change stream service started');
   } catch (err) {
-    logger.error({ event: 'realtime:start_failed', err }, 'Failed to start change stream');
-    throw err;
+    logger.error({ event: 'realtime:start_failed', err }, 'Failed to start change stream (likely no replica set) - falling back to polling/offline mode');
+    // DO NOT throw err here, so the server can continue bootstrapping
   }
 }
 
@@ -96,7 +96,12 @@ function _openStream() {
     logger.info({ event: 'realtime:resuming', token: lastResumeToken }, '🔄 Resuming change stream from last token');
   }
 
-  changeStream = Dish.watch(pipeline, options);
+  try {
+    changeStream = Dish.watch(pipeline, options);
+  } catch (err) {
+    logger.warn('Dish.watch() failed synchronously, likely no replica set.');
+    throw err;
+  }
 
   // ── Event: a document changed ───────────────────────────────────────
   changeStream.on('change', (change) => {
@@ -114,6 +119,11 @@ function _openStream() {
 
   // ── Event: stream encountered an error ──────────────────────────────
   changeStream.on('error', (err) => {
+    if (err.code === 40573) {
+      logger.warn('⚠️  Change streams require a replica set. SSE real-time updates are disabled.');
+      _isRunning = false;
+      return; // Do not reconnect
+    }
     logger.warn(
       { event: 'realtime:stream_error', err },
       '⚠️  Change stream error — will attempt to resubscribe'

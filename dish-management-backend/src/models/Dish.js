@@ -20,8 +20,8 @@
 
 const mongoose = require('mongoose');
 
-// Simple but robust URL pattern: must start with http:// or https://
-const URL_REGEX = /^https?:\/\/.+/;
+// Simple but robust URL pattern: must start with http://, https://, or /
+const URL_REGEX = /^(\/|https?:\/\/).+/;
 
 const dishSchema = new mongoose.Schema(
   {
@@ -45,7 +45,7 @@ const dishSchema = new mongoose.Schema(
       trim: true,
       validate: {
         validator: (v) => URL_REGEX.test(v),
-        message: (props) => `"${props.value}" is not a valid URL (must start with http:// or https://)`,
+        message: (props) => `"${props.value}" is not a valid URL (must start with http://, https://, or /)`,
       },
     },
     price: {

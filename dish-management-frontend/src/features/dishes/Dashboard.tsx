@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Toaster } from 'sonner';
 import { TopActivityTicker } from '../../components/TopActivityTicker';
 import { DishGrid } from './DishGrid';
@@ -17,6 +18,7 @@ export const Dashboard: React.FC = () => {
   const headerRef = useRef<HTMLElement>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [comingSoonFeature, setComingSoonFeature] = useState<string | null>(null);
 
   const addRailEvent = useCallback((event: RailEvent) => {
     setRailEvents((prev) => [event, ...prev].slice(0, MAX_RAIL_EVENTS));
@@ -48,11 +50,10 @@ export const Dashboard: React.FC = () => {
   };
 
   const handleLockedFeature = (feature: string) => {
-    toast.error('Feature locked in demo environment', {
-      description: `The ${feature} module requires a full license.`,
-      icon: <span className="material-symbols-outlined text-[#F59E0B]">lock</span>,
-      style: { background: '#f5f3f3', border: '1px solid #d4c4b7', color: '#1b1c1c' }
-    });
+    setComingSoonFeature(feature);
+    setTimeout(() => {
+      setComingSoonFeature(null);
+    }, 3000);
   };
 
   return (
@@ -74,15 +75,15 @@ export const Dashboard: React.FC = () => {
             <span className="material-symbols-outlined fill-icon">menu_book</span>
             <span>Menu</span>
           </button>
-          <button onClick={() => handleLockedFeature('Inventory')} className="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90 opacity-50">
+          <button onClick={() => handleLockedFeature('Inventory')} className="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90 hover:text-primary">
             <span className="material-symbols-outlined">inventory_2</span>
             <span>Inventory</span>
           </button>
-          <button onClick={() => handleLockedFeature('Orders')} className="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90 opacity-50">
+          <button onClick={() => handleLockedFeature('Orders')} className="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90 hover:text-primary">
             <span className="material-symbols-outlined">receipt_long</span>
             <span>Orders</span>
           </button>
-          <button onClick={() => handleLockedFeature('Analytics')} className="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90 opacity-50">
+          <button onClick={() => handleLockedFeature('Analytics')} className="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90 hover:text-primary">
             <span className="material-symbols-outlined">bar_chart</span>
             <span>Analytics</span>
           </button>
@@ -218,6 +219,22 @@ export const Dashboard: React.FC = () => {
 
       <AddDishModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <Toaster position="bottom-right" />
+
+      {/* Framer Motion Coming Soon Caption */}
+      <AnimatePresence>
+        {comingSoonFeature && (
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 flex items-center gap-3 bg-primary text-on-primary px-6 py-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-primary/20 backdrop-blur-md"
+          >
+            <span className="material-symbols-outlined text-xl animate-pulse">auto_awesome</span>
+            <span className="font-medium tracking-wide">The <span className="font-bold">{comingSoonFeature}</span> feature is brewing and will be available soon!</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
