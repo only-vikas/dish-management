@@ -21,7 +21,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const handleSimulateChange = async () => {
     setIsSimulating(true);
     try {
-      const res = await fetch('http://localhost:5000/api/admin/simulate-change', { method: 'POST' });
+      const BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+      const res = await fetch(`${BASE}/admin/simulate-change`, { method: 'POST' });
       if (!res.ok) throw new Error('Failed to trigger simulation');
       toast.success('Demo Mode Triggered', {
         description: 'External database changes are being simulated. Watch the dashboard!',
@@ -36,7 +37,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const handleResetWorkspace = async () => {
     setIsResetting(true);
     try {
-      const res = await fetch('http://localhost:5000/api/admin/reset-workspace', { method: 'POST' });
+      const BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+      const res = await fetch(`${BASE}/admin/reset-workspace`, { method: 'POST' });
       if (!res.ok) throw new Error('Failed to reset workspace');
       toast.success('Workspace Reset', {
         description: 'The database has been seeded to its default state. Please reload the page.',
