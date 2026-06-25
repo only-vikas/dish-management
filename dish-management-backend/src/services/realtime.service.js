@@ -39,9 +39,10 @@ const ssePool = require('../utils/ssePool');
 // In a multi-process deployment you'd persist this to Redis or DB itself.
 let lastResumeToken = null;
 
-// The active ChangeStream instance — kept in module scope so start/stop work
 let changeStream = null;
 let _isRunning = false;
+let _pollInterval = null;
+let _lastCheckTime = new Date();
 
 /**
  * Start watching the Dish collection for any writes.
@@ -120,9 +121,9 @@ function _openStream() {
   // ── Event: stream encountered an error ──────────────────────────────
   changeStream.on('error', (err) => {
     if (err.code === 40573) {
-      logger.warn('⚠️  Change streams require a replica set. SSE real-time updates are disabled.');
-      _isRunning = false;
-      return; // Do not reconnect
+      logger.warn('⚠️  Change streams require a replica set. Falling back to 1-second API polling for local development.');
+      _startPollingFallback();
+      return; // Do not reconnect change stream
     }
     logger.warn(
       { event: 'realtime:stream_error', err },
@@ -196,6 +197,45 @@ function _handleChange(change) {
 }
 
 /**
+ * Fallback polling mechanism for standalone MongoDB (Local Development)
+ */
+function _startPollingFallback() {
+  if (_pollInterval) clearInterval(_pollInterval);
+  _isRunning = true;
+  _lastCheckTime = new Date();
+
+  _pollInterval = setInterval(async () => {
+    try {
+      const Dish = mongoose.model('Dish');
+      const checkTime = new Date();
+      // Find anything modified after our last check
+      const updatedDocs = await Dish.find({ updatedAt: { $gt: _lastCheckTime } });
+      
+      for (const doc of updatedDocs) {
+        const payload = {
+          id: doc._id?.toString(),
+          dishId: doc.dishId,
+          dishName: doc.dishName,
+          imageUrl: doc.imageUrl,
+          isPublished: doc.isPublished,
+          createdAt: doc.createdAt,
+          updatedAt: doc.updatedAt,
+        };
+
+        ssePool.broadcast('dish:updated', payload);
+        logger.info(
+          { event: 'realtime:broadcast_poll', dishId: doc.dishId, isPublished: doc.isPublished },
+          `📡 Broadcast dish:updated (via poll fallback) for "${doc.dishName}"`
+        );
+      }
+      _lastCheckTime = checkTime;
+    } catch (err) {
+      logger.error({ event: 'realtime:poll_error', err }, 'Error in polling fallback');
+    }
+  }, 1000); // 1-second interval
+}
+
+/**
  * Exponential-backoff reconnect — prevents hammering MongoDB if it's recovering.
  * Caps at 30 seconds between attempts.
  */
@@ -229,6 +269,10 @@ function _scheduleReconnect() {
  */
 async function stop() {
   _isRunning = false; // prevent reconnect loop from triggering on the 'close' event
+  if (_pollInterval) {
+    clearInterval(_pollInterval);
+    _pollInterval = null;
+  }
   if (changeStream) {
     await changeStream.close();
     changeStream = null;
