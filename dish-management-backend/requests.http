@@ -1,0 +1,70 @@
+### Dish Management API
+### Base URL: http://localhost:5000
+
+# ─────────────────────────────────────────────
+# Health Check
+# ─────────────────────────────────────────────
+
+GET http://localhost:5000/api/health
+Accept: application/json
+
+###
+
+# ─────────────────────────────────────────────
+# Get All Dishes (default sort: dishName asc)
+# ─────────────────────────────────────────────
+
+GET http://localhost:5000/api/dishes
+Accept: application/json
+
+###
+
+# ─────────────────────────────────────────────
+# Get All Dishes (sorted by createdAt desc)
+# ─────────────────────────────────────────────
+
+GET http://localhost:5000/api/dishes?sort=createdAt&order=desc
+Accept: application/json
+
+###
+
+# ─────────────────────────────────────────────
+# Toggle a dish's isPublished status
+# Replace "1" with any valid dishId from your seed data
+# ─────────────────────────────────────────────
+
+PATCH http://localhost:5000/api/dishes/1/toggle
+Accept: application/json
+
+###
+
+PATCH http://localhost:5000/api/dishes/3/toggle
+Accept: application/json
+
+###
+
+# ─────────────────────────────────────────────
+# Test 404 — non-existent dishId
+# ─────────────────────────────────────────────
+
+PATCH http://localhost:5000/api/dishes/does-not-exist/toggle
+Accept: application/json
+
+###
+
+# ─────────────────────────────────────────────
+# Test 404 — unknown route
+# ─────────────────────────────────────────────
+
+GET http://localhost:5000/api/unknown-route
+Accept: application/json
+
+###
+
+# ─────────────────────────────────────────────
+# SSE Stream — open in browser or use curl:
+#   curl -N http://localhost:5000/api/stream
+# ─────────────────────────────────────────────
+
+GET http://localhost:5000/api/stream
+Accept: text/event-stream
