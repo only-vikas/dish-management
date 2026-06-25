@@ -36,7 +36,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import type { Dish, RailEvent } from '../types/dish';
 
-const SSE_URL = '/api/stream';
+const BASE = import.meta.env.VITE_API_BASE_URL || '/api';
+const SSE_URL = `${BASE}/stream`;
 const INITIAL_RECONNECT_DELAY = 2000;
 const MAX_RECONNECT_DELAY = 30_000;
 

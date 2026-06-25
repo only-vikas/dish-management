@@ -1,0 +1,34 @@
+services:
+  # 1. Backend Web Service
+  - type: web
+    name: dish-management-backend
+    env: node
+    rootDir: dish-management-backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ALLOWED_ORIGINS
+        # This will be automatically populated with the frontend URL once deployed
+        value: "*"
+      - key: MONGO_URI
+        # IMPORTANT: Replace this in your Render dashboard with your actual MongoDB Atlas connection string!
+        value: "mongodb+srv://<username>:<password>@cluster0.mongodb.net/dish-management"
+
+  # 2. Frontend Static Site
+  - type: web
+    name: dish-management-frontend
+    env: static
+    rootDir: dish-management-frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_BASE_URL
+        # This automatically pulls the URL of the backend service created above!
+        fromService:
+          type: web
+          name: dish-management-backend
+          envVarKey: RENDER_EXTERNAL_URL
+        # Since the backend serves from /api
+        property: value/api

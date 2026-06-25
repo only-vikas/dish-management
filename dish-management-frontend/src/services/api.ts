@@ -12,8 +12,8 @@
 
 import type { Dish, ApiResponse } from '../types/dish';
 
-// Vite's proxy (vite.config.ts) forwards /api → http://localhost:5000
-const BASE = '/api';
+// Vite's proxy (vite.config.ts) forwards /api → http://localhost:5000 during dev
+const BASE = import.meta.env.VITE_API_BASE_URL || '/api';
 
 /**
  * Fetch all dishes from the backend.
