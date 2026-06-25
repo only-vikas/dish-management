@@ -24,8 +24,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       const BASE = import.meta.env.VITE_API_BASE_URL || '/api';
       const res = await fetch(`${BASE}/admin/simulate-change`, { method: 'POST' });
       if (!res.ok) throw new Error('Failed to trigger simulation');
+      
+      const data = await res.json();
+      const match = data.data?.log?.match(/Dish:\s+(.+)/);
+      const dishName = match ? match[1].trim() : 'A dish';
+
       toast.success('Demo Mode Triggered', {
-        description: 'External database changes are being simulated. Watch the dashboard!',
+        description: `External database changes simulated for "${dishName}". Watch the dashboard!`,
       });
     } catch (err: any) {
       toast.error('Simulation Failed', { description: err.message });

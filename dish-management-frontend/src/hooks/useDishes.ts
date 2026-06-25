@@ -81,7 +81,7 @@ export function useDishes(onRailEvent: (event: RailEvent) => void) {
       });
 
       // Precise microcopy: the verb matches the actual new state
-      toast.success(`Dish ${action.toLowerCase()}`, {
+      toast.success(`"${dishName}" ${action.toLowerCase()}`, {
         duration: 3000,
         position: 'bottom-right',
         style: { background: '#e6f4ea', border: '1px solid #10B981', color: '#137333' },
