@@ -48,6 +48,14 @@ const dishSchema = new mongoose.Schema(
         message: (props) => `"${props.value}" is not a valid URL (must start with http:// or https://)`,
       },
     },
+    price: {
+      type: Number,
+      default: 0,
+    },
+    description: {
+      type: String,
+      default: '',
+    },
     isPublished: {
       type: Boolean,
       default: false,

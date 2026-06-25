@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Toaster } from 'sonner';
-import { ActivityRail } from '../../components/ActivityRail';
+import { TopActivityTicker } from '../../components/TopActivityTicker';
 import { DishGrid } from './DishGrid';
 import { AddDishModal } from './AddDishModal';
 import { useDishes } from '../../hooks/useDishes';
@@ -64,7 +64,7 @@ export const Dashboard: React.FC = () => {
             <img alt="Restaurant Logo" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDU3rKYIsyxOf5HW1ylZvfGzksZIBXBMp_E_BIhMe5BCz1-4q53EIOs-bk4iLlyTy6qxg-3umsHL3MDRTWe3LBKQ8eYPvmoGXqfZR6syUb65ed-a1_yLqPxKQy24aHKIM-PhWNGJYBxl4rD-Hm3VOQqxAt-p6kQ2CuY8_ponPtZJZlyz2nVhjjPwjW5KU-MFqId-eH31eZglCkz8A7k-3LNPd3cePlEln8FrAglZIS0DCnsf0gkl6kvv9_P1EOVrqc9354cpEvv3_u3"/>
           </div>
           <div>
-            <h1 className="font-headline-page text-headline-page text-primary text-[18px] leading-tight">The Grand Bistro</h1>
+            <h1 className="font-headline-page text-headline-page text-primary text-[18px] leading-tight">Euphotic Lab's Kitchen</h1>
             <p className="font-metadata text-metadata text-on-surface-variant">Kitchen Management</p>
           </div>
         </div>
@@ -112,6 +112,9 @@ export const Dashboard: React.FC = () => {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col h-screen overflow-hidden relative bg-surface">
+        {/* Top Activity Ticker */}
+        <TopActivityTicker events={railEvents} />
+        
         {/* Header */}
         <header ref={headerRef} className="h-header_height flex items-center justify-between px-gutter border-b border-outline-variant bg-surface/80 backdrop-blur-md z-30 flex-shrink-0">
           <div className="flex items-center gap-4">
@@ -124,12 +127,21 @@ export const Dashboard: React.FC = () => {
             <div className="relative hidden sm:block">
               <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
               <input 
-                className="pl-9 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-full text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors w-64" 
+                className="pl-9 pr-10 py-2 bg-surface-container-low border border-outline-variant rounded-full text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors w-64" 
                 placeholder="Search dishes..." 
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors flex items-center justify-center"
+                  aria-label="Clear search"
+                >
+                  <span className="material-symbols-outlined text-[16px]">close</span>
+                </button>
+              )}
             </div>
             <div className={`w-3 h-3 rounded-full ${connected ? 'bg-secondary' : 'bg-error'} shadow-sm`} title={connected ? 'Connected' : 'Reconnecting...'} />
           </div>
@@ -202,9 +214,6 @@ export const Dashboard: React.FC = () => {
             />
           </section>
         </div>
-
-        {/* Activity Rail */}
-        <ActivityRail events={railEvents} />
       </main>
 
       <AddDishModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
