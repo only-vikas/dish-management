@@ -61,8 +61,7 @@ export const Dashboard: React.FC = () => {
       <aside className="bg-surface-container-low flex-shrink-0 h-screen w-64 docked left-0 border-r border-outline-variant flex flex-col p-4 z-40 relative hidden md:flex">
         <div className="mb-8 flex items-center gap-3 px-2">
           <div className="w-10 h-10 rounded-lg overflow-hidden bg-surface-variant flex-shrink-0 border border-outline-variant">
-            {/* Logo placeholder */}
-            <div className="w-full h-full flex items-center justify-center bg-primary text-on-primary font-bold">GB</div>
+            <img alt="Restaurant Logo" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDU3rKYIsyxOf5HW1ylZvfGzksZIBXBMp_E_BIhMe5BCz1-4q53EIOs-bk4iLlyTy6qxg-3umsHL3MDRTWe3LBKQ8eYPvmoGXqfZR6syUb65ed-a1_yLqPxKQy24aHKIM-PhWNGJYBxl4rD-Hm3VOQqxAt-p6kQ2CuY8_ponPtZJZlyz2nVhjjPwjW5KU-MFqId-eH31eZglCkz8A7k-3LNPd3cePlEln8FrAglZIS0DCnsf0gkl6kvv9_P1EOVrqc9354cpEvv3_u3"/>
           </div>
           <div>
             <h1 className="font-headline-page text-headline-page text-primary text-[18px] leading-tight">The Grand Bistro</h1>
@@ -100,9 +99,13 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div className="border-t border-outline-variant pt-4 flex flex-col gap-2">
-          <button onClick={() => handleLockedFeature('Settings')} className="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90 opacity-50">
+          <button onClick={() => handleLockedFeature('Settings')} className="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90">
             <span className="material-symbols-outlined text-[20px]">settings</span>
             <span>Settings</span>
+          </button>
+          <button onClick={() => handleLockedFeature('Support')} className="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg scale-95 active:scale-90">
+            <span className="material-symbols-outlined text-[20px]">help</span>
+            <span>Support</span>
           </button>
         </div>
       </aside>
@@ -169,20 +172,20 @@ export const Dashboard: React.FC = () => {
             </div>
             
             {/* View Mode Toggle */}
-            <div className="flex bg-surface-container-low border border-outline-variant rounded-lg p-1">
-              <button 
-                onClick={() => setViewMode('grid')}
-                className={`p-1.5 rounded-md flex items-center justify-center transition-colors ${viewMode === 'grid' ? 'bg-surface shadow-sm text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}
-                title="Grid View"
-              >
-                <span className="material-symbols-outlined text-[20px]">grid_view</span>
-              </button>
+            <div className="flex items-center gap-2 text-on-surface-variant">
               <button 
                 onClick={() => setViewMode('list')}
-                className={`p-1.5 rounded-md flex items-center justify-center transition-colors ${viewMode === 'list' ? 'bg-surface shadow-sm text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}
+                className={`p-2 rounded-lg transition-colors border ${viewMode === 'list' ? 'bg-surface-variant border-outline-variant text-primary' : 'border-transparent hover:border-outline-variant hover:bg-surface-variant'}`}
                 title="List View"
               >
-                <span className="material-symbols-outlined text-[20px]">view_list</span>
+                <span className="material-symbols-outlined">view_list</span>
+              </button>
+              <button 
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-lg transition-colors border ${viewMode === 'grid' ? 'bg-surface-variant border-outline-variant text-primary' : 'border-transparent hover:border-outline-variant hover:bg-surface-variant'}`}
+                title="Grid View"
+              >
+                <span className="material-symbols-outlined">grid_view</span>
               </button>
             </div>
           </div>

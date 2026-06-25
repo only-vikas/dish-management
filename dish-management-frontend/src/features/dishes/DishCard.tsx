@@ -45,21 +45,29 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, onToggle, isExternally
           }}
         />
         
-        {/* Interactive Toggle Pill (Top Right) */}
-        <motion.button
-          onClick={handleToggle}
-          whileTap={{ scale: 0.95 }}
-          className={`absolute top-3 right-3 px-3 py-1.5 rounded-full font-badge-label text-badge-label flex items-center gap-1.5 shadow-sm border transition-all cursor-pointer hover:-translate-y-0.5 hover:shadow-md ${
-            isPublished
-              ? 'bg-white/90 border-[#2D5A3D] text-[#2D5A3D] hover:bg-[#2D5A3D] hover:text-white'
-              : 'bg-surface/90 border-[#C97F5C] text-[#C97F5C] hover:bg-[#C97F5C] hover:text-white'
-          }`}
-        >
-          <span className="material-symbols-outlined text-[16px]">
-            {isPublished ? 'toggle_on' : 'toggle_off'}
-          </span>
-          {isPublished ? 'Published' : 'Draft'}
-        </motion.button>
+        {/* Badge and Toggle Button (Top Left) */}
+        <div className="absolute top-3 left-3 flex items-center gap-2">
+          {/* Static Badge */}
+          <div className={`px-2.5 py-1 rounded-full font-badge-label text-badge-label flex items-center gap-1 shadow-sm backdrop-blur-sm border ${
+            isPublished ? 'bg-white/90 border-secondary/20 text-secondary' : 'bg-surface/90 border-outline-variant text-on-surface-variant'
+          }`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${isPublished ? 'bg-secondary' : 'bg-outline-variant'}`}></span>
+            {isPublished ? 'Published' : 'Draft'}
+          </div>
+          
+          {/* Interactive Toggle Button */}
+          <motion.button
+            onClick={handleToggle}
+            whileTap={{ scale: 0.95 }}
+            className={`px-3 py-1 rounded-full font-badge-label text-badge-label font-bold shadow-sm border transition-all cursor-pointer backdrop-blur-sm ${
+              isPublished
+                ? 'bg-white/90 border-[#2D5A3D] text-[#2D5A3D] hover:bg-[#2D5A3D] hover:text-white'
+                : 'bg-surface/90 border-[#C97F5C] text-[#C97F5C] hover:bg-[#C97F5C] hover:text-white'
+            }`}
+          >
+            {isPublished ? 'Unpublish' : 'Publish'}
+          </motion.button>
+        </div>
       </motion.div>
 
       <motion.div layout="position" className="p-[20px] flex flex-col gap-2 flex-1 justify-between">

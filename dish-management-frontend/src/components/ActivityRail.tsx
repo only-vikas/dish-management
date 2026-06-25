@@ -29,6 +29,9 @@ export const ActivityRail: React.FC<ActivityRailProps> = ({ events }) => {
     <div className="absolute bottom-0 w-full h-[110px] bg-surface/95 backdrop-blur-md border-t-[2px] border-primary z-30 flex flex-col shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)]">
       <div className="px-gutter py-2 flex items-center justify-between border-b border-outline-variant/30">
         <span className="font-button-label text-button-label text-on-surface-variant uppercase tracking-wider text-[10px]">Recent Activity</span>
+        <button className="text-primary hover:text-primary/80 transition-colors">
+          <span className="material-symbols-outlined text-[16px]">open_in_new</span>
+        </button>
       </div>
       
       <div className="flex-1 overflow-x-auto flex items-center px-gutter gap-6 no-scrollbar pb-2">
@@ -63,7 +66,7 @@ export const ActivityRail: React.FC<ActivityRailProps> = ({ events }) => {
                 className="flex items-center gap-3 min-w-max pr-6 border-r border-outline-variant/50 relative"
               >
                 {event.source === 'external' && (
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1 h-8 bg-blue-500 rounded-r-full shadow-[0_0_8px_rgba(59,130,246,0.6)] animate-pulse"></div>
+                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full shadow-[0_0_8px_rgba(124,87,45,0.6)] animate-pulse"></div>
                 )}
                 <div className={`w-9 h-9 rounded-full flex items-center justify-center ${colorClasses}`}>
                   <span className="material-symbols-outlined text-[18px]">{icon}</span>
