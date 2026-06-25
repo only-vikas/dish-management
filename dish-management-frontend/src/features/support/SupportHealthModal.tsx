@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 
@@ -7,22 +7,12 @@ interface SupportHealthModalProps {
   onClose: () => void;
 }
 
-interface HealthStatus {
-  status: string;
-  mongodb: { connected: boolean };
-  changeStream: { active: boolean; connected: boolean };
-  realtimeConnections: number;
-}
 
 export const SupportHealthModal: React.FC<SupportHealthModalProps> = ({ isOpen, onClose }) => {
-  const [health, setHealth] = useState<HealthStatus | null>(null);
-
   useEffect(() => {
     if (isOpen) {
       // Fetch health status when modal opens
       fetch('http://localhost:5000/api/health')
-        .then(res => res.json())
-        .then(data => setHealth(data.data))
         .catch(err => console.error('Failed to fetch health status:', err));
     }
   }, [isOpen]);

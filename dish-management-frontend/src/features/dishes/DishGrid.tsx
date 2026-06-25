@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import gsap from 'gsap';
 import { DishCard } from './DishCard';
@@ -10,6 +10,7 @@ interface Props {
   loading: boolean;
   error: string | null;
   onToggle: (dish: Dish) => void;
+  onDelete?: (dishId: string) => void;
   externallyUpdatedId: string | null;
   viewMode?: 'grid' | 'list';
 }
@@ -19,6 +20,7 @@ export const DishGrid: React.FC<Props> = ({
   loading,
   error,
   onToggle,
+  onDelete,
   externallyUpdatedId,
   viewMode = 'grid',
 }) => {
@@ -100,6 +102,7 @@ export const DishGrid: React.FC<Props> = ({
             <DishCard
               dish={dish}
               onToggle={onToggle}
+              onDelete={onDelete}
               isExternallyUpdated={externallyUpdatedId === dish.dishId}
               viewMode={viewMode}
             />

@@ -5,6 +5,8 @@ export interface Dish {
   id: string;           // MongoDB _id stringified
   dishId: string;       // Business identifier (e.g. "1")
   dishName: string;
+  description?: string;
+  price?: number;
   imageUrl: string;
   isPublished: boolean;
   createdAt: string;    // ISO 8601
