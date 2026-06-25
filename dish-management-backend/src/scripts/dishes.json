@@ -1,12 +1,82 @@
 [
-  { "dishId": "1", "dishName": "Margherita Pizza", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg", "isPublished": true },
-  { "dishId": "2", "dishName": "Spaghetti Carbonara", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_pasta_ubt.jpeg", "isPublished": false },
-  { "dishId": "3", "dishName": "Caesar Salad", "imageUrl": "/caesar_salad.jpg", "isPublished": true },
-  { "dishId": "4", "dishName": "Chicken Tikka Masala", "imageUrl": "/chicken_tikka_masala.jpg", "isPublished": true },
-  { "dishId": "5", "dishName": "Beef Tacos", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/001_Tacos_de_carnitas%2C_Tex-Mex%2C_2011.jpg/800px-001_Tacos_de_carnitas%2C_Tex-Mex%2C_2011.jpg", "isPublished": false },
-  { "dishId": "6", "dishName": "Sushi Platter", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sushi_platter.jpg/800px-Sushi_platter.jpg", "isPublished": true },
-  { "dishId": "7", "dishName": "Pad Thai", "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Authentic_Thai_Pad_Thai.jpg/800px-Authentic_Thai_Pad_Thai.jpg", "isPublished": false },
-  { "dishId": "8", "dishName": "French Onion Soup", "imageUrl": "/french_onion_soup.jpg", "isPublished": true },
-  { "dishId": "9", "dishName": "Butter Chicken", "imageUrl": "/butter_chicken.jpg", "isPublished": true },
-  { "dishId": "10", "dishName": "Chocolate Lava Cake", "imageUrl": "/chocolate_lava_cake.jpg", "isPublished": false }
+  {
+    "dishId": "1",
+    "dishName": "Margherita Pizza",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg",
+    "isPublished": true,
+    "description": "Classic Italian pizza with San Marzano tomatoes, fresh mozzarella, and fragrant basil.",
+    "price": 14.99
+  },
+  {
+    "dishId": "2",
+    "dishName": "Spaghetti Carbonara",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_pasta_ubt.jpeg",
+    "isPublished": false,
+    "description": "Traditional Roman pasta dish made with egg, hard cheese, cured guanciale, and black pepper.",
+    "price": 16.50
+  },
+  {
+    "dishId": "3",
+    "dishName": "Caesar Salad",
+    "imageUrl": "/caesar_salad.jpg",
+    "isPublished": true,
+    "description": "Crisp romaine lettuce tossed in creamy Caesar dressing with parmesan and toasted croutons.",
+    "price": 11.50
+  },
+  {
+    "dishId": "4",
+    "dishName": "Chicken Tikka Masala",
+    "imageUrl": "/chicken_tikka_masala.jpg",
+    "isPublished": true,
+    "description": "Roasted marinated chicken chunks served in a rich, spiced, and creamy curry sauce.",
+    "price": 18.00
+  },
+  {
+    "dishId": "5",
+    "dishName": "Beef Tacos",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/001_Tacos_de_carnitas%2C_Tex-Mex%2C_2011.jpg/800px-001_Tacos_de_carnitas%2C_Tex-Mex%2C_2011.jpg",
+    "isPublished": false,
+    "description": "Authentic street-style tacos filled with slow-cooked shredded beef, cilantro, and diced onions.",
+    "price": 13.50
+  },
+  {
+    "dishId": "6",
+    "dishName": "Sushi Platter",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sushi_platter.jpg/800px-Sushi_platter.jpg",
+    "isPublished": true,
+    "description": "An assortment of premium fresh nigiri and maki rolls, served with soy sauce and freshly grated wasabi.",
+    "price": 24.99
+  },
+  {
+    "dishId": "7",
+    "dishName": "Pad Thai",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Authentic_Thai_Pad_Thai.jpg/800px-Authentic_Thai_Pad_Thai.jpg",
+    "isPublished": false,
+    "description": "Stir-fried rice noodles with eggs, crushed peanuts, crisp bean sprouts, and tender chicken.",
+    "price": 15.00
+  },
+  {
+    "dishId": "8",
+    "dishName": "French Onion Soup",
+    "imageUrl": "/french_onion_soup.jpg",
+    "isPublished": true,
+    "description": "Rich beef broth packed with deeply caramelized onions, topped with rustic croutons and melted gruyere.",
+    "price": 9.99
+  },
+  {
+    "dishId": "9",
+    "dishName": "Butter Chicken",
+    "imageUrl": "/butter_chicken.jpg",
+    "isPublished": true,
+    "description": "Tender pieces of chicken simmered in a velvety, buttery, and mildly spiced tomato sauce.",
+    "price": 17.50
+  },
+  {
+    "dishId": "10",
+    "dishName": "Chocolate Lava Cake",
+    "imageUrl": "/chocolate_lava_cake.jpg",
+    "isPublished": false,
+    "description": "Decadent warm chocolate cake with a gooey, molten center, served with vanilla bean ice cream.",
+    "price": 8.50
+  }
 ]
