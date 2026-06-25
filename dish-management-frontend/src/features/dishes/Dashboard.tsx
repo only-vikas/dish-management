@@ -35,7 +35,7 @@ export const Dashboard: React.FC = () => {
   const { dishes, loading, error, togglePublish, sseUpsert, sseDelete } =
     useDishes(addRailEvent);
 
-  const { connected, externallyUpdatedId } = useSSE({
+  const { connected, externallyUpdatedId, registerPendingToggle } = useSSE({
     onUpsert: sseUpsert,
     onDelete: sseDelete,
     onRailEvent: addRailEvent,
@@ -44,8 +44,9 @@ export const Dashboard: React.FC = () => {
   const { filteredDishes, filterActive, setFilterActive, searchQuery, setSearchQuery, counts } = useDishFilter(dishes);
 
   const handleToggle = useCallback((dish: Dish) => {
+    registerPendingToggle(dish.dishId);
     togglePublish(dish);
-  }, [togglePublish]);
+  }, [togglePublish, registerPendingToggle]);
 
   const handleDelete = useCallback((dishId: string) => {
     setDishToDelete(dishId);
